@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include <wayland-client.h>
 #include <wayland-egl.h>
+#include <wayland-xdg-decoration-client-protocol.h>
 #include <wayland-xdg-shell-client-protocol.h>
 
 #include <EGL/egl.h>
@@ -20,9 +21,11 @@ class context {
   wl_registry *m_registry;
   wl_compositor *m_compositor;
   xdg_wm_base *m_xdg_base;
+  zxdg_decoration_manager_v1 *m_xdg_dm;
   wl_surface *m_wl_surface;
   xdg_surface *m_xdg_surface;
   xdg_toplevel *m_xdg_toplevel;
+  zxdg_toplevel_decoration_v1 *m_xdg_toplevel_decor;
   bool m_wants_close;
   std::int32_t m_width;
   std::int32_t m_height;
@@ -109,6 +112,14 @@ context::context() {
   static const xdg_toplevel_listener xdg_toplevel_listener = {
       cb_xdg_toplevel_configure, cb_xdg_toplevel_close, nullptr, nullptr};
   xdg_toplevel_add_listener(m_xdg_toplevel, &xdg_toplevel_listener, this);
+  if (m_xdg_dm) {
+    // If this interface isn't present, do nothing.
+    // TODO: Log a warning.
+    m_xdg_toplevel_decor = zxdg_decoration_manager_v1_get_toplevel_decoration(
+        m_xdg_dm, m_xdg_toplevel);
+    zxdg_toplevel_decoration_v1_set_mode(
+        m_xdg_toplevel_decor, ZXDG_TOPLEVEL_DECORATION_V1_MODE_SERVER_SIDE);
+  }
   wl_surface_commit(m_wl_surface);
 
   // Create window.
@@ -165,8 +176,10 @@ context::~context() {
   eglTerminate(m_egl_display);
   wl_egl_window_destroy(m_egl_window);
   wl_region_destroy(m_region);
+  zxdg_toplevel_decoration_v1_destroy(m_xdg_toplevel_decor);
   xdg_toplevel_destroy(m_xdg_toplevel);
   xdg_surface_destroy(m_xdg_surface);
+  zxdg_decoration_manager_v1_destroy(m_xdg_dm);
   xdg_wm_base_destroy(m_xdg_base);
   wl_surface_destroy(m_wl_surface);
   wl_compositor_destroy(m_compositor);
@@ -187,6 +200,10 @@ void context::cb_registry_global_add(void *context_ptr, wl_registry *registry,
         wl_registry_bind(registry, id, &xdg_wm_base_interface, 1));
     static const xdg_wm_base_listener xdg_base_listener{cb_xdg_base_ping};
     xdg_wm_base_add_listener(thiz->m_xdg_base, &xdg_base_listener, context_ptr);
+  } else if (interface == zxdg_decoration_manager_v1_interface.name) {
+    thiz->m_xdg_dm =
+        reinterpret_cast<zxdg_decoration_manager_v1 *>(wl_registry_bind(
+            registry, id, &zxdg_decoration_manager_v1_interface, 1));
   }
 }
 

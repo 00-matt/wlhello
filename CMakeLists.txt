@@ -10,6 +10,9 @@ find_package(Wayland REQUIRED COMPONENTS client egl protocols scanner)
 
 add_executable(wlhello main.cc)
 wayland_client_protocol_add(wlhello
+  PROTOCOL "${Wayland_protocols_dir}/unstable/xdg-decoration/xdg-decoration-unstable-v1.xml"
+  BASENAME xdg-decoration)
+wayland_client_protocol_add(wlhello
   PROTOCOL "${Wayland_protocols_dir}/stable/xdg-shell/xdg-shell.xml"
   BASENAME xdg-shell)
 target_link_libraries(wlhello PRIVATE
