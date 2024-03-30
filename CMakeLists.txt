@@ -9,7 +9,9 @@ find_package(OpenGL REQUIRED COMPONENTS EGL GLES3)
 find_package(Wayland REQUIRED COMPONENTS client egl protocols scanner)
 find_package(Xkbcommon REQUIRED)
 
-add_executable(wlhello main.cc)
+add_executable(wlhello
+  main.cc
+  window.cc)
 wayland_client_protocol_add(wlhello
   PROTOCOL "${Wayland_protocols_dir}/unstable/xdg-decoration/xdg-decoration-unstable-v1.xml"
   BASENAME xdg-decoration)
