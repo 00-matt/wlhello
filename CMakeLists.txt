@@ -20,3 +20,7 @@ target_link_libraries(wlhello PRIVATE
   OpenGL::GLES3
   Wayland::client
   Wayland::egl)
+set_target_properties(wlhello PROPERTIES
+  CXX_STANDARD 20
+  CXX_STANDARD_REQUIRED ON
+  CXX_EXTENSIONS OFF)
