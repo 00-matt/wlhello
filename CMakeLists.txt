@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2024 Matthew Smith <matthew@matthew.as>
 # SPDX-License-Identifier: GPL-3.0-or-later
-cmake_minimum_required(VERSION 3.29)
+cmake_minimum_required(VERSION 3.25)
 project(wlhello C CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
