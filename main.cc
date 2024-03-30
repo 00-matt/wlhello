@@ -190,19 +190,19 @@ context::~context() {
 void context::cb_registry_global_add(void *context_ptr, wl_registry *registry,
                                      std::uint32_t id, const char *interface_cs,
                                      std::uint32_t) {
-  context *thiz = reinterpret_cast<context *>(context_ptr);
+  auto thiz = static_cast<context *>(context_ptr);
   std::string_view interface = interface_cs;
-  if (interface == "wl_compositor") {
-    thiz->m_compositor = reinterpret_cast<wl_compositor *>(
+  if (interface == wl_compositor_interface.name) {
+    thiz->m_compositor = static_cast<wl_compositor *>(
         wl_registry_bind(registry, id, &wl_compositor_interface, 1));
   } else if (interface == xdg_wm_base_interface.name) {
-    thiz->m_xdg_base = reinterpret_cast<xdg_wm_base *>(
+    thiz->m_xdg_base = static_cast<xdg_wm_base *>(
         wl_registry_bind(registry, id, &xdg_wm_base_interface, 1));
     static const xdg_wm_base_listener xdg_base_listener{cb_xdg_base_ping};
     xdg_wm_base_add_listener(thiz->m_xdg_base, &xdg_base_listener, context_ptr);
   } else if (interface == zxdg_decoration_manager_v1_interface.name) {
     thiz->m_xdg_dm =
-        reinterpret_cast<zxdg_decoration_manager_v1 *>(wl_registry_bind(
+        static_cast<zxdg_decoration_manager_v1 *>(wl_registry_bind(
             registry, id, &zxdg_decoration_manager_v1_interface, 1));
   }
 }
@@ -220,12 +220,12 @@ void context::cb_xdg_surface_configure(void *, xdg_surface *xdg_surface,
 void context::cb_xdg_toplevel_configure(void *context_ptr, xdg_toplevel *,
                                         std::int32_t width, std::int32_t height,
                                         wl_array *) {
-  context *thiz = reinterpret_cast<context *>(context_ptr);
+  auto thiz = static_cast<context *>(context_ptr);
   thiz->resize(width, height);
 }
 
 void context::cb_xdg_toplevel_close(void *context_ptr, xdg_toplevel *) {
-  context *thiz = reinterpret_cast<context *>(context_ptr);
+  auto thiz = static_cast<context *>(context_ptr);
   thiz->m_wants_close = true;
 }
 
