@@ -1,0 +1,6 @@
+[
+    { "include": [ "<wayland-client-core.h>", "private", "<wayland-client.h>", "public" ] },
+    { "include": [ "<wayland-client-protocol.h>", "private", "<wayland-client.h>", "public" ] },
+    { "include": [ "<wayland-egl-core.h>", "private", "<wayland-egl.h>", "public" ] },
+    { "include": [ "<EGL/eglplatform.h>", "private", "<EGL/egl.h>", "public" ] }
+]
