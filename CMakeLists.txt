@@ -7,6 +7,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 find_package(OpenGL REQUIRED COMPONENTS EGL GLES3)
 find_package(Wayland REQUIRED COMPONENTS client egl protocols scanner)
+find_package(Xkbcommon REQUIRED)
 
 add_executable(wlhello main.cc)
 wayland_client_protocol_add(wlhello
@@ -19,7 +20,8 @@ target_link_libraries(wlhello PRIVATE
   OpenGL::EGL
   OpenGL::GLES3
   Wayland::client
-  Wayland::egl)
+  Wayland::egl
+  Xkbcommon::xkbcommon)
 set_target_properties(wlhello PROPERTIES
   CXX_STANDARD 20
   CXX_STANDARD_REQUIRED ON
