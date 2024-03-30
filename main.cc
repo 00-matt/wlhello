@@ -24,28 +24,28 @@ static const std::int32_t k_width = 800;
 static const std::int32_t k_height = 600;
 
 class context {
-  wl_display *m_wl_display;
-  wl_registry *m_registry;
-  wl_compositor *m_compositor;
-  xdg_wm_base *m_xdg_base;
-  wl_seat *m_seat;
-  zxdg_decoration_manager_v1 *m_xdg_dm;
-  wl_surface *m_wl_surface;
-  xdg_surface *m_xdg_surface;
-  xdg_toplevel *m_xdg_toplevel;
-  zxdg_toplevel_decoration_v1 *m_xdg_toplevel_decor;
-  wl_keyboard *m_wl_keyboard;
-  bool m_wants_close;
-  std::int32_t m_width;
-  std::int32_t m_height;
-  wl_region *m_region;
-  wl_egl_window *m_egl_window;
-  EGLDisplay m_egl_display;
-  EGLSurface m_egl_surface;
-  EGLConfig m_egl_context;
-  xkb_state *m_xkb_state;
-  xkb_context *m_xkb_context;
-  xkb_keymap *m_xkb_keymap;
+  wl_display *m_wl_display{nullptr};
+  wl_registry *m_registry{nullptr};
+  wl_compositor *m_compositor{nullptr};
+  xdg_wm_base *m_xdg_base{nullptr};
+  wl_seat *m_seat{nullptr};
+  zxdg_decoration_manager_v1 *m_xdg_dm{nullptr};
+  wl_surface *m_wl_surface{nullptr};
+  xdg_surface *m_xdg_surface{nullptr};
+  xdg_toplevel *m_xdg_toplevel{nullptr};
+  zxdg_toplevel_decoration_v1 *m_xdg_toplevel_decor{nullptr};
+  wl_keyboard *m_wl_keyboard{nullptr};
+  bool m_wants_close{false};
+  std::int32_t m_width{k_width};
+  std::int32_t m_height{k_height};
+  wl_region *m_region{nullptr};
+  wl_egl_window *m_egl_window{nullptr};
+  EGLDisplay m_egl_display{nullptr};
+  EGLSurface m_egl_surface{nullptr};
+  EGLConfig m_egl_context{nullptr};
+  xkb_state *m_xkb_state{nullptr};
+  xkb_context *m_xkb_context{nullptr};
+  xkb_keymap *m_xkb_keymap{nullptr};
 
   static void cb_registry_global_add(void *context_ptr, wl_registry *registry,
                                      std::uint32_t name, const char *interface,
